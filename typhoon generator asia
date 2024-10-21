@@ -1,0 +1,83 @@
+import turtle
+import random
+
+def irma_setup():
+
+    import tkinter
+    turtle.setup(965, 600)  # set size of window to size of map
+
+    wn = turtle.Screen()
+    wn.title("Hurricane Irma")
+
+    # kludge to get the map shown as a background image,
+    # since wn.bgpic does not allow you to position the image
+    canvas = wn.getcanvas()
+    turtle.setworldcoordinates(-90, 0, -17.66, 45)  # set the coordinate system to match lat/long
+
+    map_bg_img = tkinter.PhotoImage(file="images/atlantic-basin.png")
+    canvas.create_image(-1175, -580, anchor=tkinter.NW, image=map_bg_img)
+
+    t = turtle.Turtle()
+    wn.register_shape("images/hurricane.gif")
+    t.shape("images/hurricane.gif")
+
+    return (t, wn, map_bg_img)
+
+random.randint(1, 10)
+
+def irma():
+    (t, wn, map_bg_img) = irma_setup()
+    data = open("C:/Users/behru/python files/hurricane files/StarterFiles/StarterFiles/data/irma.csv")
+    lat = []
+    long = []
+    wind = []
+    lines = data.readlines()
+    lines = lines[1:]
+    for line in lines:
+        line = line.split(",")
+        lat.append(float(line[2]))
+        long.append(float(line[3]))
+        wind.append(int(line[4]))
+    # your code to animate Irma here
+
+    t.penup()
+    t.goto(lat[0], long[0])
+    t.pendown()
+    
+
+    def hurrricane_class(lat,long, wind):
+        for lo, la, win in zip(lat,long, wind):
+            t.setpos(la, lo)
+        if win<73:
+            t.pencolor("white")
+            t.pensize(5)
+        elif 73<win<96:
+            t.pencolor("blue")
+            t.pensize(6)
+            t.write("1", move=False, align='left', font=('Arial', 8, 'normal'))
+        elif 95<win<111:
+            t.pencolor("green")
+            t.pensize(7)
+            t.write("2", move=False, align='left', font=('Arial', 8, 'normal'))
+        elif 110<win<129:
+            t.pencolor("yellow")
+            t.pensize(8)
+            t.write("3", move=False, align='left', font=('Arial', 8, 'normal'))
+        elif 129<win<157:
+            t.pencolor("orange")
+            t.pensize(9)
+            t.write("4", move=False, align='left', font=('Arial', 8, 'normal'))
+        elif 156<win:
+            t.pencolor("red")
+            t.pensize(10)
+            t.write("5", move=False, align='left', font=('Arial', 8, 'normal'))
+        
+    hurrricane_class(lat,long, wind)
+    return lat, long, wind
+
+if __name__ == "__main__":
+    irma()
+
+
+print(lat, long, wind)
+turtle.done()
